@@ -1,4 +1,10 @@
+#Equipe: Mariane Fernandes, Michael Robets, Yuri Levi
+
+#PS: Criar arquivo CodigoFonte.txt na raiz contendo o texto do codigo fonte a ser analisado
+
 import re
+
+##Inicio
 
 #ler mais de uma linha
 def inputCodigo():
@@ -54,7 +60,7 @@ def definirClasses():
   classes.append([9, "operador aritmético", "^[+]$|^[-]$|^[/]$|^[*]$"])
   classes.append([10, "operador lógico", "^and$|^or$"])
   classes.append([11, "inteiro", "^[-]?[0-9]+$"])
-  classes.append([12, "float", "^[-]?[0-9]+([.][0-9]+)?$"])
+  classes.append([12, "float", "^[-]?[0-9][.][0-9]([0-9]+)?$"])
   classes.append([13, "string", "^[\"](.*)[\"]$"])
   classes.append([14, "abrir parênteses", "[(]"])
   classes.append([15, "fechar parênteses", "[)]"])
@@ -82,10 +88,15 @@ tokens = []
 tabelaSimbolos = []
 palavrasReservadas = definirPalavrasReservadas()
 
+#Arquivo contendo codigo fonte
+codigoFonte = open ('CodigoFonte.txt', 'r')
+#Arquivo criado para salvar as Tokens geradas
+aTokens = open ('Tokens.txt', 'w')
 
-print('Insira o codigo\n')
-codigo = inputCodigo()
+print('Lendo Arquivo contendo codigo fonte\n')
+codigo = codigoFonte.read()
 lexemas = trataTextoCodigo(codigo)
+
 
 
 #Verifica se o lexema pertence a linguagem e depois cria o token
@@ -104,19 +115,34 @@ for lexema in lexemas :
           tokens.append([classe[0], tabelaSimbolos.index(lexema)])
 
 
+
+
 print('\nTokens gerados:\n')
 print('O caractere "," foi escolhido para, dentro de cada token, separar o código do tipo de lexema do lexema propriamente dito.')
+#aTokens.write('O caractere "," foi escolhido para, dentro de cada token, separar o código do tipo de lexema do lexema propriamente dito.')
 print('Para mais fácil visualização, cada token será representado em uma diferente linha.\n')
+#aTokens.write('Para mais fácil visualização, cada token será representado em uma diferente linha.\n' + '\n')
 
 #Imprime tokens
 for token in tokens:
   if(token[0] == 7):
     print(str(token[0]) + ',' + tabelaSimbolos[token[1]])
+    aTokens.write(str(token[0]) + ',' + tabelaSimbolos[token[1]] + '\n')
   else:
     print(str(token[0]) + ',' + token[1])
-
+    aTokens.write(str(token[0]) + ',' + token[1] + '\n')
+  
 print('\nTabelas de Simbolos gerada:\n')
+
+
 
 #Imprime tokens
 for simbolo in tabelaSimbolos:
     print(simbolo)
+
+print('\nArquivo Tokens.txt gerado no diretório raiz.')
+
+aTokens.close()
+codigoFonte.close()
+
+#Fim
